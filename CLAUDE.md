@@ -117,6 +117,26 @@ Post links found: N
 
 Commit all changes (findings file and updated `notes.md`) with a descriptive message, then push to the remote.
 
+Spawning Dotfiles Missions
+--------------------------
+
+Many suggestions from this repo result in missions spawned to `mieubrisse/dotfiles` (which contains the user's Claude Code configuration — skills, hooks, settings, CLAUDE.md). The dotfiles repo is the authority on how to implement changes to itself. This repo's job is to surface *what* Anthropic announced and *why* it might matter — not to dictate *how* the dotfiles repo should implement it.
+
+When spawning a mission to the dotfiles repo, the prompt should:
+
+- **Describe the Anthropic insight** — what was announced or recommended, in enough detail for the dotfiles agent to understand the concept without needing to fetch the blog post itself
+- **Include strong references** — blog post URL(s), the path to this mission's findings file (`~/.agenc/missions/<this-mission-uuid>/agent/findings/YYYY-MM-DD.md`), and this mission's UUID so the dotfiles agent can read the full analysis if needed
+- **Ask for suggestions** — frame the prompt as "here's what Anthropic said, how might we incorporate this into the dotfiles repo?" rather than prescribing specific file edits, skill modifications, or implementation steps
+
+The prompt should NOT:
+
+- Give detailed implementation instructions (the dotfiles repo knows its own structure and conventions)
+- Specify which files to edit or how to edit them
+- Prescribe skill modifications at the token level
+- Include step-by-step checklists for the dotfiles agent to follow
+
+Trust the dotfiles repo to figure out the best way to apply the insight. This repo provides the *what* and *why*; dotfiles provides the *how*.
+
 Quality Standards
 -----------------
 
