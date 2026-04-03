@@ -45,6 +45,7 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [Harnessing Claude's intelligence](https://claude.com/blog/harnessing-claudes-intelligence) — analyzed 2026-04-03
 - [Claude now creates interactive charts, diagrams and visualizations](https://claude.com/blog/claude-builds-visuals) — analyzed 2026-04-01
 - [How enterprises are building AI agents in 2026](https://claude.com/blog/how-enterprises-are-building-ai-agents-in-2026) — analyzed 2026-04-01
 - [Improving frontend design through Skills](https://claude.com/blog/improving-frontend-design-through-skills) — analyzed 2026-04-01
@@ -59,5 +60,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-04-01
+Last fetched: 2026-04-03
 Post links found: 10
