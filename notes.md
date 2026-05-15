@@ -45,6 +45,16 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [Redesigning Claude Code on desktop for parallel agents](https://claude.com/blog/claude-code-desktop-redesign) — analyzed 2026-05-15
+- [Preparing your security program for AI-accelerated offense](https://claude.com/blog/preparing-your-security-program-for-ai-accelerated-offense) — analyzed 2026-05-15
+- [The founder's playbook: Building an AI-native startup](https://claude.com/blog/the-founders-playbook) — analyzed 2026-05-15
+- [How Claude Code works in large codebases: Best practices and where to start](https://claude.com/blog/how-claude-code-works-in-large-codebases-best-practices-and-where-to-start) — analyzed 2026-05-15
+- [Best practices for computer and browser use with Claude](https://claude.com/blog/best-practices-for-computer-and-browser-use-with-claude) — analyzed 2026-05-15
+- [Code w/ Claude SF 2026: Building on the AI exponential](https://claude.com/blog/code-w-claude-sf-2026-sf) — analyzed 2026-05-15
+- [Claude for the legal industry](https://claude.com/blog/claude-for-the-legal-industry) — analyzed 2026-05-15
+- [How Anthropic's cybersecurity team built a threat detection platform with Claude Code](https://claude.com/blog/how-anthropic-uses-claude-cybersecurity) — analyzed 2026-05-15
+- [Agent view in Claude Code](https://claude.com/blog/agent-view-in-claude-code) — analyzed 2026-05-15
+- [Introducing the Claude Platform on AWS](https://claude.com/blog/claude-platform-on-aws) — analyzed 2026-05-15
 - [Collaborate with Claude across Excel, PowerPoint, Word and Outlook](https://claude.com/blog/collaborate-with-claude-across-excel-powerpoint-word-and-outlook) — analyzed 2026-05-10
 - [New in Claude Managed Agents: dreaming, outcomes, multiagent orchestration](https://claude.com/blog/new-in-claude-managed-agents) — analyzed 2026-05-10
 - [Deploying Claude across financial services](https://claude.com/blog/deploying-claude-across-financial-services) — analyzed 2026-05-10
@@ -76,5 +86,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-05-10
-Post links found: 15
+Last fetched: 2026-05-15
+Post links found: 24
