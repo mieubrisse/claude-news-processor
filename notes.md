@@ -45,6 +45,12 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [Introducing dynamic workflows in Claude Code](https://claude.com/blog/introducing-dynamic-workflows-in-claude-code) — analyzed 2026-05-29
+- [Using LLMs to secure source code](https://claude.com/blog/using-llms-to-secure-source-code) — analyzed 2026-05-29
+- [How CodeRabbit used Claude to build an agent orchestration system](https://claude.com/blog/how-coderabbit-used-claude-to-build-an-agent-orchestration-system) — analyzed 2026-05-29
+- [Zero Trust for AI agents](https://claude.com/blog/zero-trust-for-ai-agents) — analyzed 2026-05-29
+- [Code w/ Claude London 2026: Rethinking how we build](https://claude.com/blog/code-w-claude-london-2026-rethinking-how-we-build) — analyzed 2026-05-29
+- [How Anthropic's finance team uses Claude to shape the narrative behind the numbers](https://claude.com/blog/how-anthropics-finance-team-uses-claude-to-shape-the-narrative-behind-the-numbers) — analyzed 2026-05-29
 - [New in Claude Managed Agents: self-hosted sandboxes and MCP tunnels](https://claude.com/blog/claude-managed-agents-updates) — analyzed 2026-05-22
 - [Claude now works with more security and compliance tools](https://claude.com/blog/compliance-api-security-partners) — analyzed 2026-05-22
 - [How our partners are putting Opus to work for cybersecurity](https://claude.com/blog/how-our-partners-are-putting-opus-to-work-for-cybersecurity) — analyzed 2026-05-22
@@ -92,5 +98,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-05-22
-Post links found: 24
+Last fetched: 2026-05-29
+Post links found: 15
