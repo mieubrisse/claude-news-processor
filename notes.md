@@ -45,6 +45,11 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude) — analyzed 2026-06-05
+- [Lessons from building Claude Code: How we use skills](https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills) — analyzed 2026-06-05
+- [Best practices for getting started with Claude Cowork](https://claude.com/blog/best-practices-for-getting-started-with-claude-cowork) — analyzed 2026-06-05
+- [Running an AI-native engineering org](https://claude.com/blog/running-an-ai-native-engineering-org) — analyzed 2026-06-05
+- [A harness for every task: Dynamic workflows in Claude Code](https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code) — analyzed 2026-06-05
 - [Introducing dynamic workflows in Claude Code](https://claude.com/blog/introducing-dynamic-workflows-in-claude-code) — analyzed 2026-05-29
 - [Using LLMs to secure source code](https://claude.com/blog/using-llms-to-secure-source-code) — analyzed 2026-05-29
 - [How CodeRabbit used Claude to build an agent orchestration system](https://claude.com/blog/how-coderabbit-used-claude-to-build-an-agent-orchestration-system) — analyzed 2026-05-29
@@ -98,5 +103,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-05-29
-Post links found: 15
+Last fetched: 2026-06-05
+Post links found: 25
