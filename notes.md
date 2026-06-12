@@ -45,6 +45,12 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [The evolution of agentic surfaces: building with Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) — analyzed 2026-06-12
+- [New in Claude Managed Agents: run agents on a schedule and store environment variables in vaults](https://claude.com/blog/whats-new-in-claude-managed-agents) — analyzed 2026-06-12
+- [Building intelligent apps for Apple platforms with Claude in the Foundation Models framework](https://claude.com/blog/claude-for-foundation-models) — analyzed 2026-06-12
+- [Observability for developers building connectors](https://claude.com/blog/observability-for-developers-building-connectors) — analyzed 2026-06-12
+- [The Claude Cowork product guide](https://claude.com/blog/the-claude-cowork-product-guide) — analyzed 2026-06-12
+- [How one Anthropic seller rebuilt his team's workflows with Claude Code](https://claude.com/blog/how-anthropic-uses-claude-gtm-engineering) — analyzed 2026-06-12
 - [How Anthropic enables self-service data analytics with Claude](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude) — analyzed 2026-06-05
 - [Lessons from building Claude Code: How we use skills](https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills) — analyzed 2026-06-05
 - [Best practices for getting started with Claude Cowork](https://claude.com/blog/best-practices-for-getting-started-with-claude-cowork) — analyzed 2026-06-05
@@ -103,5 +109,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-06-05
-Post links found: 25
+Last fetched: 2026-06-12
+Post links found: 15
