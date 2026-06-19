@@ -45,6 +45,13 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [Steering Claude Code: skills, hooks, rules, subagents and more](https://claude.com/blog/steering-claude-code-skills-hooks-rules-subagents-and-more) — analyzed 2026-06-19
+- [Claude Code now supports artifacts](https://claude.com/blog/artifacts-in-claude-code) — analyzed 2026-06-19
+- [Claude Design now stays on brand for daily work](https://claude.com/blog/claude-design-stays-on-brand-for-daily-work) — analyzed 2026-06-19
+- [Meet the winners of the Built with Opus 4.7 Claude Code hackathon](https://claude.com/blog/meet-the-winners-of-built-with-opus-4-7-claude-code-hackathon) — analyzed 2026-06-19
+- [Meet the winners of our Claude Opus 4.8 Build Day hackathon](https://claude.com/blog/meet-the-winners-of-our-claude-opus-4-8-build-day-hackathon) — analyzed 2026-06-19
+- [Centrally manage authorization for MCP connectors](https://claude.com/blog/enterprise-managed-auth) — analyzed 2026-06-19
+- [Workload Identity Federation now generally available on the Claude Platform](https://claude.com/blog/workload-identity-federation) — analyzed 2026-06-19
 - [The evolution of agentic surfaces: building with Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) — analyzed 2026-06-12
 - [New in Claude Managed Agents: run agents on a schedule and store environment variables in vaults](https://claude.com/blog/whats-new-in-claude-managed-agents) — analyzed 2026-06-12
 - [Building intelligent apps for Apple platforms with Claude in the Foundation Models framework](https://claude.com/blog/claude-for-foundation-models) — analyzed 2026-06-12
@@ -109,5 +116,5 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-06-12
-Post links found: 15
+Last fetched: 2026-06-19
+Post links found: 23
