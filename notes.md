@@ -45,6 +45,18 @@ Extensive skill library covering:
 Processed Posts
 ===============
 
+- [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration) — analyzed 2026-07-17
+- [Working with Claude Fable 5 in Claude Cowork](https://claude.com/blog/working-with-claude-fable-5-in-claude-cowork) — analyzed 2026-07-17
+- [Working at the frontier: Why Base44 trusts Claude Fable 5 with their most challenging engineering work](https://claude.com/blog/working-at-the-frontier-why-base44-trusts-claude-fable-5-with-their-most-challenging-engineering-work) — analyzed 2026-07-17
+- [Working at the frontier: How Hebbia builds AI for financial diligence that can't miss a detail](https://claude.com/blog/working-at-the-frontier-how-hebbia-builds-ai-for-financial-diligence-that-cant-miss-a-detail) — analyzed 2026-07-17
+- [Working at the frontier: How Cognition trusts Claude Fable 5 to work through the night](https://claude.com/blog/working-at-the-frontier-how-cognition-trusts-claude-fable-5-to-work-through-the-night) — analyzed 2026-07-17
+- [Working at the frontier: How Thomson Reuters builds AI for high-stakes professional work](https://claude.com/blog/working-at-the-frontier-how-thomson-reuters-builds-ai-for-high--stakes-professional-work) — analyzed 2026-07-17
+- [How Anthropic's marketing operations team uses Claude Cowork to automate reporting and campaign builds](https://claude.com/blog/how-anthropics-marketing-operations-team-uses-claude-cowork-to-automate-reporting-and-campaign-builds) — analyzed 2026-07-17
+- [Bringing Claude Code and Claude Cowork to government](https://claude.com/blog/bringing-claude-code-and-claude-cowork-to-government) — analyzed 2026-07-17
+- [Choosing a Claude model and effort level in Claude Code](https://claude.com/blog/claude-model-and-effort-level-in-claude-code) — analyzed 2026-07-17
+- [Claude Cowork is coming to mobile and web](https://claude.com/blog/cowork-web-mobile) — analyzed 2026-07-17
+- [How people are using Claude Cowork](https://claude.com/blog/how-people-are-using-claude-cowork) — analyzed 2026-07-17
+- [A field guide to Claude Fable 5: Finding your unknowns](https://claude.com/blog/a-field-guide-to-claude-fable-finding-your-unknowns) — analyzed 2026-07-17
 - [Getting started with loops](https://claude.com/blog/getting-started-with-loops) — analyzed 2026-07-03
 - [Building effective human-agent teams](https://claude.com/blog/building-effective-human-agent-teams) — analyzed 2026-07-03
 - [Agent identity in Claude Tag: a new access model](https://claude.com/blog/agent-identity-access-model) — analyzed 2026-07-03
@@ -123,5 +135,16 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-07-03
-Post links found: 24
+Last fetched: 2026-07-17
+Post links found: 15
+<!-- Note: the blog index renders a rolling window of most-recent posts, so the raw
+     link count varies run-to-run (24 on 2026-07-03, 15 today). 15 is within normal
+     range — extraction demonstrably worked (12 new posts fetched with full content).
+     Only treat a count near zero, or a drop paired with failed extractions, as a structural break. -->
+<!-- 2026-07-10 run failed with an API error before producing findings; no coverage gap
+     — this 2026-07-17 run processed the full two-week backlog. -->
+<!-- Model class note: Claude Fable 5 is now the frontier line alongside Opus 4.8.
+     Kevin's sessions currently run on Opus 4.8. -->
+<!-- Assistant note: Kevin's assistant is Erika Mioshi (per global CLAUDE.md /erika);
+     handoff via the Kevin/Erika Work Tracker. Earlier setup-context notes referencing a
+     todoist-manager repo are stale. -->
