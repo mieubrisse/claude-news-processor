@@ -44,7 +44,7 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 
 ### Environment Gotchas (this repo's runs)
 
-- **git push over SSH fails in mission environments** (global `insteadOf` rewrite → broken `nc` proxy). Workaround proven on the 2026-07-17 run: push with `GIT_CONFIG_GLOBAL=/dev/null git push https://...` (HTTPS + token). Verify the push landed via `git log origin/main -1` afterward.
+- **git push over SSH**: broken on the 2026-07-17 run (global `insteadOf` rewrite → broken `nc` proxy; workaround was `GIT_CONFIG_GLOBAL=/dev/null` + HTTPS token push) but worked plainly on 2026-08-28. If a push fails with connection-class errors, reach for that workaround before diagnosing anything else, and verify with `git log origin/main -1`.
 - WebFetch works; Bash network access is sandboxed. `agenc` CLI works at top level.
 - Kevin's assistant is Erika Mioshi (per global CLAUDE.md /erika); handoff via the Kevin/Erika Work Tracker.
 
