@@ -8,43 +8,89 @@ Setup Context
 - Solo repos: commit directly to default branch. Collaborative repos: feature branches
 - Can spawn new missions for cross-repo work; headed (visible) by default
 - Repo library at ~/.agenc/repos for read-only reference across missions
+- Writeable-copy repos (dotfiles, exobrain) are daemon-persisted — agents must NOT git add/commit/push there
+- Cron fleet includes: claude-news-processor (this repo), build-weekly-plan, daily-state-summary, flight-watcher, hn-daily-pull, exobrain-update, verify-workspace-mcp-denylist, arpan-claude-optimization-suggestions
+- Sessions now run on **Claude Fable 5** (frontier tier above Opus; confirmed by this mission's own runtime). Harness includes Workflow tool (multi-agent orchestration scripts), Agent tool subagents, and an advisor tool (stronger-reviewer consult)
 
 ### Skills
 
-Extensive skill library covering:
-- **Process:** brainstorm, systematic-debugging, test-driven-development, writing-plans, executing-plans, verification-before-completion, receiving-code-review, requesting-code-review, subagent-driven-development
-- **Engineering:** software-engineer (mandatory for all code work), go-coding, typescript-coding, bash-coding, python-coding, prompt-engineer, claude-skill-management
-- **Domain:** entrepreneurship-advice, kurtosis (startup lessons), coaching-journal, personal-journal, ux-designer, content-brainstormer, substack-writer, instagram-video-producer
-- **Meta:** using-superpowers (skill discovery), self-refine, claude-code-configuration, agenc-engineer
+100+ skill library. Major clusters:
 
-### Hooks
+- **Meta/config:** cc-configuration umbrella (cc-skill-management, cc-rules, cc-settings-editing, cc-mcp-editing), prompt-engineer, structural-fix, self-refine, exobrain, master-information-architecture, kevin-decision-policy
+- **Process:** diamond-cascade, brainstorm, complexity-estimator, question-burndown, superpowers pack (TDD, systematic-debugging, verification-before-completion, etc.)
+- **Engineering:** software-engineer (mandatory for code work), go/typescript/bash/python-coding, beads-system, agenc-cron-loops
+- **Content production:** vr-content-* verifier fleet (icp-reviewer, source-verifier, external-fact-verifier, concreteness-reviewer), writing-proofreader, compressibility-audit, vr-instagram-* pipelines, vr-newsletter-production, substack-writer, tech-landing-page-creation-pipeline
+- **Life ops:** todoist-system, process-todoist-inbox, google-calendar-management, personal-journal, flight-planning, notion-crm
 
-- PreToolUse hook: `remove-redundant-git-c.sh` strips redundant `git -C` targeting current directory
+### Hooks & Guards
+
+- Guidance-Edit Gate: PreToolUse judge reviews every Write/Edit to guidance files (CLAUDE.md, SKILL.md, rules, commands, agents) against prompt-engineer doctrine; blocks with cited findings
+- block-direct-beads-writes.sh (no direct .beads/*.jsonl|*.db mutation), bd unsandbox hook (loopback TCP)
+- block-workspace-mcp-destructive-actions.sh + monthly verify-workspace-mcp-denylist check-loop (the canonical loop/check-loop pair)
+- dcg destructive-command guard on Bash (e.g., blocks `rm -rf` on home-rooted paths — observed live this run)
+- Shell snapshot aliases basic POSIX tools (`ls` etc.) — use `command <tool>` as discriminator when flag-parsing errors appear
 
 ### MCP Servers
 
-- Todoist (comprehensive task/project management integration)
+workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), grain (meetings), canva, deepwiki, polar, meta-ads, posthog, plus plugin servers (resend, vercel, context7). Todoist via `td` CLI, Notion via `notion` CLI, beads via `bd` CLI.
 
 ### Coding Conventions
 
 - Languages: Go, TypeScript, Bash, Python
 - Markdown: underline-style h1 (`===`) and h2 (`---`), no `#`/`##`
-- Git: single-line commit messages, no Co-Authored-By, separate git operations (never chain with `&&`)
+- Git: single-line commit messages; ONLY permitted trailer is `AgenC mission: <uuid>`; no Co-Authored-By or other attribution (overrides harness defaults)
 - No emoji unless explicitly requested
-- Mandatory `/software-engineer` invocation before any code work
-- Mandatory language-specific skill invocation (go-coding, typescript-coding, etc.)
+- Mandatory `/software-engineer` + language-skill invocation before code work
 
-### Workflows
+### Environment Gotchas (this repo's runs)
 
-- Request refinement protocol: complexity-scaled questioning before execution
-- Plan mode only when user explicitly asks
-- `dangerouslyDisableSandbox: true` used when command is permitted by settings.json but blocked by sandbox layer
-- GitHub username: mieubrisse
-- "My assistant" = mieubrisse/todoist-manager repo (spawn mission to delegate tasks)
+- **git push over SSH fails in mission environments** (global `insteadOf` rewrite → broken `nc` proxy). Workaround proven on the 2026-07-17 run: push with `GIT_CONFIG_GLOBAL=/dev/null git push https://...` (HTTPS + token). Verify the push landed via `git log origin/main -1` afterward.
+- WebFetch works; Bash network access is sandboxed. `agenc` CLI works at top level.
+- Kevin's assistant is Erika Mioshi (per global CLAUDE.md /erika); handoff via the Kevin/Erika Work Tracker.
 
 Processed Posts
 ===============
 
+- [How Warp builds self-improving agents on Claude](https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude) — analyzed 2026-08-28
+- [Claude in Chrome is generally available](https://claude.com/blog/claude-in-chrome-generally-available) — analyzed 2026-08-28
+- [Claude gets its own browser in Cowork](https://claude.com/blog/cowork-built-in-browser) — analyzed 2026-08-28
+- [Bain & Company joins the Claude Partner Network as a Global Premier partner](https://claude.com/blog/bain-company-joins-the-claude-partner-network-as-a-global-premier-partner) — analyzed 2026-08-28
+- [Claude's memory works everywhere, and you decide what's in it](https://claude.com/blog/claudes-memory-works-everywhere-and-you-decide-whats-in-it) — analyzed 2026-08-28
+- [How an Anthropic field marketer uses Claude Code to send weekly personalized updates to every sales rep](https://claude.com/blog/how-an-anthropic-field-marketer-uses-claude-code-to-send-weekly-personalized-updates-to-every-sales-rep) — analyzed 2026-08-28
+- [Bringing the cybersecurity capabilities of Claude Mythos 5 to more defenders](https://claude.com/blog/bringing-claude-mythos-5-to-more-defenders) — analyzed 2026-08-28
+- [The AI-Native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) — analyzed 2026-08-28
+- [Anthropic's approach to teaching and learning AI](https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai) — analyzed 2026-08-28
+- [How monday.com transformed its platform into an agent-first product where humans and agents collaborate](https://claude.com/blog/how-monday-com-transformed-its-platform-into-an-agent-first-product-where-humans-and-agents-collaborate) — analyzed 2026-08-28
+- [The Claude Code guide for startups](https://claude.com/blog/claude-code-guide-for-startups) — analyzed 2026-08-28
+- [Build production agents with computer use, the Skills API, and the Files API](https://claude.com/blog/computer-use-skills-api-files-api) — analyzed 2026-08-28
+- [Turning conversation into knowledge: how Slack builds human-agent teams](https://claude.com/blog/turning-conversation-into-knowledge-how-slack-builds-human-agent-teams) — analyzed 2026-08-28
+- [Claude on call: How Claude Tag serves as Anthropic's first responder for CI/CD failures](https://claude.com/blog/ai-ci-cd-on-call) — analyzed 2026-08-28
+- [How ABC Legal turned every employee into a builder with Claude Managed Agents](https://claude.com/blog/how-abc-legal-turned-every-employee-into-a-builder-with-claude-managed-agents) — analyzed 2026-08-28
+- [Maximizing the value of your Claude Code sessions](https://claude.com/blog/maximizing-the-value-of-your-claude-code-sessions) — analyzed 2026-08-28
+- [Securing the frontier: How JetBrains evaluates and deploys Claude Fable 5](https://claude.com/blog/how-jetbrains-evaluates-and-deploys-claude-fable-5) — analyzed 2026-08-28
+- [Self-service data analytics in Slack: how Anthropic deploys Claude Tag for ad-hoc questions](https://claude.com/blog/self-service-data-analytics-in-slack-how-anthropic-deploys-claude-tag-for-ad-hoc-questions) — analyzed 2026-08-28
+- [Claude Tag now reads even more of the room](https://claude.com/blog/claude-tag-now-reads-even-more-of-the-room) — analyzed 2026-08-28
+- [The Claude in Chrome side panel is now Claude Cowork](https://claude.com/blog/cowork-chrome-side-panel) — analyzed 2026-08-28
+- [Compliance API coverage extends to Claude Cowork and Claude Code](https://claude.com/blog/compliance-api-cowork-and-claude-code) — analyzed 2026-08-28
+- [Auto mode is now the default in Claude Code for Pro, Max, and Team plans](https://claude.com/blog/auto-mode-default-in-claude-code) — analyzed 2026-08-28
+- [Running auto mode in production](https://claude.com/blog/auto-mode-in-production) — analyzed 2026-08-28
+- [How Anthropic's business development team uses Claude to run inbound and outbound at scale](https://claude.com/blog/how-anthropics-business-development-team-uses-claude-to-run-inbound-and-outbound-at-scale) — analyzed 2026-08-28
+- [Millennium and Anthropic are building a digital risk analyst with Claude](https://claude.com/blog/millennium-and-anthropic-are-building-a-digital-risk-analyst-with-claude) — analyzed 2026-08-28
+- [Run Claude Code sessions on your own compute](https://claude.com/blog/run-claude-code-sessions-on-your-own-compute) — analyzed 2026-08-28
+- [Inference hooks: inline data loss prevention for Claude Enterprise](https://claude.com/blog/claude-enterprise-inference-hooks) — analyzed 2026-08-28
+- [Bringing MCP 2026-07-28 to Claude](https://claude.com/blog/bringing-mcp-2026-07-28-to-claude) — analyzed 2026-08-28
+- [The new rules of context engineering for Claude 5 generation models](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models) — analyzed 2026-08-28
+- [Claude models explained: choosing the best model for your use case](https://claude.com/blog/claude-models-explained-choosing-the-best-model-for-your-use-case) — analyzed 2026-08-28
+- [How the product designer who built Claude Design uses it to explore ideas before building them](https://claude.com/blog/how-the-product-designer-who-built-claude-design-uses-it-to-explore-ideas-before-building-them) — analyzed 2026-08-28
+- [Four role-based Claude certifications](https://claude.com/blog/four-role-based-claude-certifications) — analyzed 2026-08-28
+- [Think through hard problems in voice mode](https://claude.com/blog/think-through-hard-problems-in-voice-mode) — analyzed 2026-08-28
+- [Building verification loops in Claude Code with skills](https://claude.com/blog/building-verification-loops-in-claude-code-with-skills) — analyzed 2026-08-28
+- [How Outtake built a cyber investigator on Claude](https://claude.com/blog/how-outtake-built-a-cyber-investigator-on-claude) — analyzed 2026-08-28
+- [How Anthropic secures its AI-native software development lifecycle](https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle) — analyzed 2026-08-28
+- [How Datadog built a "universal machine tool" for Claude Code](https://claude.com/blog/how-datadog-built-a-universal-machine-tool-for-claude-code) — analyzed 2026-08-28
+- [Working at the frontier: Rakuten](https://claude.com/blog/working-at-the-frontier-rakuten) — analyzed 2026-08-28
+- [Working at the frontier: Cursor](https://claude.com/blog/working-at-the-frontier-cursor) — analyzed 2026-08-28
+- [The CISO guide to agentic AI](https://claude.com/blog/ciso-guide-to-agentic-ai) — analyzed 2026-08-28
 - [How Anthropic runs large-scale code migrations with Claude Code](https://claude.com/blog/ai-code-migration) — analyzed 2026-07-17
 - [Working with Claude Fable 5 in Claude Cowork](https://claude.com/blog/working-with-claude-fable-5-in-claude-cowork) — analyzed 2026-07-17
 - [Working at the frontier: Why Base44 trusts Claude Fable 5 with their most challenging engineering work](https://claude.com/blog/working-at-the-frontier-why-base44-trusts-claude-fable-5-with-their-most-challenging-engineering-work) — analyzed 2026-07-17
@@ -135,16 +181,27 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-07-17
-Post links found: 15
-<!-- Note: the blog index renders a rolling window of most-recent posts, so the raw
-     link count varies run-to-run (24 on 2026-07-03, 15 today). 15 is within normal
-     range — extraction demonstrably worked (12 new posts fetched with full content).
-     Only treat a count near zero, or a drop paired with failed extractions, as a structural break. -->
-<!-- 2026-07-10 run failed with an API error before producing findings; no coverage gap
-     — this 2026-07-17 run processed the full two-week backlog. -->
-<!-- Model class note: Claude Fable 5 is now the frontier line alongside Opus 4.8.
-     Kevin's sessions currently run on Opus 4.8. -->
-<!-- Assistant note: Kevin's assistant is Erika Mioshi (per global CLAUDE.md /erika);
-     handoff via the Kevin/Erika Work Tracker. Earlier setup-context notes referencing a
-     todoist-manager repo are stale. -->
+Last fetched: 2026-08-28
+Post links found: 15 (index page 1)
+<!-- STRUCTURAL FACT (confirmed 2026-08-28): the blog index is a rolling window of ~15
+     most-recent posts with JS-driven pagination ("1 / 16" pages; "View more" uses hashed
+     query params like ?b7eea976_page=2 that do NOT work via plain fetch — page 2 returns
+     page-1 content). Category pages DO enumerate more per topic and are plain-fetchable:
+     /blog-category/announcements, /blog-category/agents, /blog-category/claude-code,
+     /blog-category/enterprise-ai. Any run recovering a multi-week gap MUST sweep all four
+     category pages (and web-search as backstop); the index alone silently drops backlog. -->
+<!-- COVERAGE CAVEAT for the 2026-08-28 run: 40 posts recovered via index + all four
+     category pages + the failed 07-31 run's transcript + targeted web searches. This
+     cannot prove exhaustiveness for an *uncategorized* post published in the scrolled-off
+     window (roughly Aug 1-16); residual risk accepted and documented rather than claimed
+     away. -->
+<!-- SLUG WARNING: the Claude Design post's slug is the LONG form
+     how-the-product-designer-who-built-claude-design-uses-it-to-explore-ideas-before-building-them
+     — the truncated form (...-to-explore-ideas) 404s. The 07-31 run recorded the truncated
+     form; do not trust slugs recorded from index extraction without a successful fetch. -->
+<!-- RELIABILITY: 3 of the 5 runs before this one (2026-06-26, 07-10, 07-31) died on API
+     connection errors having produced nothing — no findings, no notification, no error
+     surfaced to Kevin. The 07-31 run also stalled ~4.5h before its first output. This is
+     the check-loop gap flagged as Suggestion 1 in findings/2026-08-28.md. -->
+<!-- Model class note: Kevin's sessions now run Claude Fable 5 (confirmed by this
+     mission's runtime). The earlier "Opus 4.8" note is obsolete. -->
