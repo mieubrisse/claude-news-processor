@@ -10,7 +10,10 @@ Setup Context
 - Repo library at ~/.agenc/repos for read-only reference across missions
 - Writeable-copy repos (dotfiles, exobrain) are daemon-persisted — agents must NOT git add/commit/push there
 - Cron fleet includes: claude-news-processor (this repo), build-weekly-plan, daily-state-summary, flight-watcher, hn-daily-pull, exobrain-update, verify-workspace-mcp-denylist, arpan-claude-optimization-suggestions
-- Sessions now run on **Claude Fable 5** (frontier tier above Opus; confirmed by this mission's own runtime). Harness includes Workflow tool (multi-agent orchestration scripts), Agent tool subagents, and an advisor tool (stronger-reviewer consult)
+- **Model: varies per mission — do not assume.** `~/.claude/settings.json` line 690 sets the session default `"model": "opus[1m]"`, and this run confirmed Opus 5 (1M) at runtime. A prior run recorded "Fable 5"; the correct reading is that the model is whatever the settings + mission spawn resolve to, so each run should check rather than inherit. As of 2026-09-01 the current frontier model is **Fable 5.1** (`claude-fable-5-1`), which Kevin's settings do NOT currently select.
+- `settings.json` line 1218 sets `"effortLevel": "xhigh"` globally. 24 further entries hard-pin `"model": "claude-opus-5"` — all of them Guidance-Edit Gate judge hooks, each with `timeout: 600`.
+- Installed Claude Code CLI: 2.1.236 (Homebrew cask, latest as of 2026-09-11). Its bundled `claude-api` skill ships subcommands `migrate`, `managed-agents-onboard`, `prompt-audit`, `upgrade` (all verified present in the binary). The `hillclimb` and `cost-optimize` subcommands announced in the 2026-09-08 cost post are NOT in this build. `prompt-audit` targets prompts in API-calling application code, not CLAUDE.md/SKILL.md guidance files.
+- Harness includes Workflow tool (multi-agent orchestration scripts), Agent tool subagents, and an advisor tool (stronger-reviewer consult)
 
 ### Skills
 
@@ -51,6 +54,14 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 Processed Posts
 ===============
 
+- [T. Rowe Price brings more of Claude to its investment process](https://claude.com/blog/t-rowe-price-brings-more-of-claude-to-its-investment-process) — analyzed 2026-09-11
+- [What 1,000 small business owners taught us about AI](https://claude.com/blog/what-1-000-small-business-owners-taught-us-about-ai) — analyzed 2026-09-11
+- [Reducing cost and improving performance with Claude Platform](https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform) — analyzed 2026-09-11
+- [Introducing Claude Fable 5.1 and Claude Mythos 5.1](https://www.anthropic.com/claude-fable-and-mythos-5-1) — analyzed 2026-09-11 (anthropic.com/news; found via web search, NOT via the blog index)
+- [A guide to the anatomy of effective commerce agents](https://claude.com/blog/the-anatomy-of-effective-commerce-agents) — analyzed 2026-09-06
+- [Building commerce agents with Claude](https://claude.com/blog/claude-for-commerce-agents) — analyzed 2026-09-06
+- [How Anthropic employees use Claude Tag](https://claude.com/blog/how-anthropic-employees-use-claude-tag) — analyzed 2026-09-06
+- [Claude for Teachers, now available for U.S. K-12 schools and districts](https://claude.com/blog/claude-for-teachers-now-available-for-schools-and-districts) — analyzed 2026-09-06
 - [How Warp builds self-improving agents on Claude](https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude) — analyzed 2026-08-28
 - [Claude in Chrome is generally available](https://claude.com/blog/claude-in-chrome-generally-available) — analyzed 2026-08-28
 - [Claude gets its own browser in Cowork](https://claude.com/blog/cowork-built-in-browser) — analyzed 2026-08-28
@@ -181,27 +192,46 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-08-28
-Post links found: 15 (index page 1)
-<!-- STRUCTURAL FACT (confirmed 2026-08-28): the blog index is a rolling window of ~15
-     most-recent posts with JS-driven pagination ("1 / 16" pages; "View more" uses hashed
-     query params like ?b7eea976_page=2 that do NOT work via plain fetch — page 2 returns
-     page-1 content). Category pages DO enumerate more per topic and are plain-fetchable:
-     /blog-category/announcements, /blog-category/agents, /blog-category/claude-code,
-     /blog-category/enterprise-ai. Any run recovering a multi-week gap MUST sweep all four
-     category pages (and web-search as backstop); the index alone silently drops backlog. -->
-<!-- COVERAGE CAVEAT for the 2026-08-28 run: 40 posts recovered via index + all four
-     category pages + the failed 07-31 run's transcript + targeted web searches. This
-     cannot prove exhaustiveness for an *uncategorized* post published in the scrolled-off
-     window (roughly Aug 1-16); residual risk accepted and documented rather than claimed
-     away. -->
+Last fetched: 2026-09-11
+Post links found: 15 (claude.com/blog index page 1)
+
+<!-- SOURCE GAP (discovered 2026-09-11, HIGH PRIORITY): this repo's CLAUDE.md names
+     https://claude.com/blog as "the Claude blog," singular. Anthropic runs TWO. The split
+     appears to be product/customer content on claude.com/blog, and company/research/MODEL
+     ANNOUNCEMENTS on https://www.anthropic.com/news. The Fable 5.1 launch (2026-09-01) —
+     a frontier model release with direct pricing and capability impact — was never seen by
+     this cron because of it; it surfaced only because a quoted sentence in an unrelated
+     cost post mentioned the name and this run web-searched it. Until CLAUDE.md is fixed,
+     EVERY RUN MUST ALSO FETCH https://www.anthropic.com/news. Unprocessed as of this run:
+     threat-intelligence-report-september-2026 (Sep 10), news/improving-alignment-security-efforts
+     (Aug 31), news/model-hardware-standard-research-preview (Aug 27),
+     news/expanding-support-for-scientists (Aug 27), news/wellbeing-research-grants (Aug 25),
+     news/claude-text-watermark (Aug 14), news/improving-fable-5-s-biology-safeguards (Aug 7). -->
+
+<!-- STRUCTURAL FACT (confirmed 2026-08-28, still true 2026-09-11): the claude.com/blog index
+     is a rolling window of ~15 most-recent posts with JS-driven pagination ("1 / 16" pages;
+     "View more" uses hashed query params like ?b7eea976_page=2 that do NOT work via plain
+     fetch — page 2 returns page-1 content). Category pages DO enumerate more per topic and
+     are plain-fetchable: /blog-category/announcements, /blog-category/agents,
+     /blog-category/claude-code, /blog-category/enterprise-ai. Any run recovering a multi-week
+     gap MUST sweep all four category pages; the index alone silently drops backlog. The
+     2026-09-11 run needed no sweep — a 5-day gap sat well inside the 15-post window. -->
+
 <!-- SLUG WARNING: the Claude Design post's slug is the LONG form
      how-the-product-designer-who-built-claude-design-uses-it-to-explore-ideas-before-building-them
-     — the truncated form (...-to-explore-ideas) 404s. The 07-31 run recorded the truncated
-     form; do not trust slugs recorded from index extraction without a successful fetch. -->
-<!-- RELIABILITY: 3 of the 5 runs before this one (2026-06-26, 07-10, 07-31) died on API
-     connection errors having produced nothing — no findings, no notification, no error
-     surfaced to Kevin. The 07-31 run also stalled ~4.5h before its first output. This is
-     the check-loop gap flagged as Suggestion 1 in findings/2026-08-28.md. -->
-<!-- Model class note: Kevin's sessions now run Claude Fable 5 (confirmed by this
-     mission's runtime). The earlier "Opus 4.8" note is obsolete. -->
+     — the truncated form (...-to-explore-ideas) 404s. Do not trust slugs recorded from index
+     extraction without a successful fetch. -->
+
+<!-- RELIABILITY: 4 of the last 7 runs failed to deliver. Three (2026-06-26, 07-10, 07-31)
+     died on API connection errors having produced nothing. The fourth (2026-09-06, mission
+     9eb25b0c) is a DISTINCT and more dangerous failure mode: it completed the full analysis
+     and wrote findings/2026-09-06.md, then hit its session limit seconds later — before
+     commit, push, or notification. The work looked finished from the inside and was invisible
+     from the outside. The 2026-09-11 run recovered that file verbatim from the dead mission's
+     working directory. Implication for bead agenc-inrf (AgenC repo, P2, tracks the cron
+     failure-alarm check-loop): an exit-status alarm would NOT have caught 09-06, because
+     nothing errored. The check must verify the artifacts landed — commit pushed AND
+     notification posted — not merely that the run exited cleanly.
+     ORDERING RULE for future runs: write files, then commit and push and VERIFY
+     (git log origin/main -1), then notify, and only then do anything slow. Never leave the
+     deliverable undurable while a long call runs. -->
