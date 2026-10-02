@@ -57,6 +57,9 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 Processed Posts
 ===============
 
+- [Deploying AI from pilot to production](https://claude.com/blog/deploying-ai-from-pilot-to-production) — analyzed 2026-10-02 (found ONLY via /blog-category/enterprise-ai sweep)
+- [Building an AI-native revenue organization](https://claude.com/blog/building-an-ai-native-revenue-organization) — analyzed 2026-10-02 (found ONLY via /blog-category/enterprise-ai sweep)
+- [How healthcare organizations use Claude Tag](https://claude.com/blog/how-healthcare-organizations-use-claude-tag) — analyzed 2026-10-02 (found ONLY via /blog-category/enterprise-ai sweep)
 - [Customize Claude Code with mods](https://claude.com/blog/claude-code-mods) — analyzed 2026-10-02
 - [Coding sessions are longer and use more context. Claude Opus 5.5 is built with that in mind.](https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context) — analyzed 2026-10-02
 - [Build plugins for Claude](https://claude.com/blog/build-plugins-for-claude) — analyzed 2026-10-02
@@ -225,8 +228,9 @@ Blog Health
 
 Last fetched: 2026-10-02
 Post links found: 15 on claude.com/blog index page 1 (pagination now reads "1 / 17"; was "1 / 16" on 2026-09-11).
-Category sweep found 3 MORE posts the index had already dropped. 10 posts on anthropic.com/news page 1.
-Total processed this run: 28 (18 blog + 10 news).
+Category sweep found 6 MORE posts the index had already dropped (3 from claude-code/announcements,
+3 from enterprise-ai). 10 posts on anthropic.com/news page 1.
+Total processed this run: 31 (21 blog + 10 news).
 
 <!-- CATEGORY SWEEP IS MANDATORY FOR ANY GAP > ~1 WEEK (re-confirmed 2026-10-02 with
      evidence): the 21-day gap this run recovered proved the structural note below. The
@@ -234,8 +238,21 @@ Total processed this run: 28 (18 blog + 10 news).
      agentic-coding-is-straining-ci... (/blog-category/claude-code),
      claude-for-small-business-launches... and claude-for-financial-advisors
      (/blog-category/announcements). Index-only discovery would have silently lost all three.
-     Note /blog-category/enterprise-ai was NOT swept this run (the other three sufficed to
-     reconcile the count); sweep it too on the next multi-week gap. -->
+     /blog-category/enterprise-ai was swept LAST and turned up THREE MORE unprocessed posts
+     the other sweeps had not surfaced: deploying-ai-from-pilot-to-production,
+     building-an-ai-native-revenue-organization, how-healthcare-organizations-use-claude-tag.
+     LESSON: sweep ALL FOUR categories, every time, before concluding discovery is complete.
+     Reconciling the index count against pagination is NOT a substitute — this run nearly
+     stopped at three sweeps on exactly that reasoning and would have silently lost three posts.
+     Six of the 31 posts this run processed were reachable only via category pages. -->
+
+<!-- MODEL-ALIAS RESOLUTION (2026-10-02): the CLI binary exposes `fable`, `fable-5`, `fable-5-1`
+     and `fable[1m]` as FOUR DISTINCT selector strings, alongside full IDs `claude-fable-5` and
+     `claude-fable-5-1`. So the bare `"fable"` in settings.json line 690 is a FLOATING alias,
+     separate from the two pinned forms, and therefore most likely tracks the newest Fable
+     (5.1 as of now). NOT PROVEN from strings alone — a future run wanting certainty should
+     just ask a live session which model it is running, or check `/model` output. This matters
+     because Fable 5 vs 5.1 cache reads differ 4x ($1.00 vs $0.25/MTok). -->
 
 <!-- SOURCE GAP (discovered 2026-09-11, STILL UNFIXED as of 2026-10-02): this repo's CLAUDE.md names
      https://claude.com/blog as "the Claude blog," singular. Anthropic runs TWO. The split
