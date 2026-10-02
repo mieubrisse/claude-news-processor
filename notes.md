@@ -10,9 +10,12 @@ Setup Context
 - Repo library at ~/.agenc/repos for read-only reference across missions
 - Writeable-copy repos (dotfiles, exobrain) are daemon-persisted — agents must NOT git add/commit/push there
 - Cron fleet includes: claude-news-processor (this repo), build-weekly-plan, daily-state-summary, flight-watcher, hn-daily-pull, exobrain-update, verify-workspace-mcp-denylist, arpan-claude-optimization-suggestions
-- **Model: varies per mission — do not assume.** `~/.claude/settings.json` line 690 sets the session default `"model": "opus[1m]"`, and this run confirmed Opus 5 (1M) at runtime. A prior run recorded "Fable 5"; the correct reading is that the model is whatever the settings + mission spawn resolve to, so each run should check rather than inherit. As of 2026-09-01 the current frontier model is **Fable 5.1** (`claude-fable-5-1`), which Kevin's settings do NOT currently select.
-- `settings.json` line 1218 sets `"effortLevel": "xhigh"` globally. 24 further entries hard-pin `"model": "claude-opus-5"` — all of them Guidance-Edit Gate judge hooks, each with `timeout: 600`.
-- Installed Claude Code CLI: 2.1.236 (Homebrew cask, latest as of 2026-09-11). Its bundled `claude-api` skill ships subcommands `migrate`, `managed-agents-onboard`, `prompt-audit`, `upgrade` (all verified present in the binary). The `hillclimb` and `cost-optimize` subcommands announced in the 2026-09-08 cost post are NOT in this build. `prompt-audit` targets prompts in API-calling application code, not CLAUDE.md/SKILL.md guidance files.
+- **Model: varies per mission — do not assume. Re-read settings each run; these numbers drift fast.** As of 2026-10-02, `settings.json` line 690 sets the session default to `"model": "fable"` (an ALIAS — this run could NOT determine whether it resolves to `claude-fable-5` or `claude-fable-5-1`, and the difference is 4x on cache reads: $1.00 vs $0.25/MTok. Resolve before costing anything). Prior runs recorded `"opus[1m]"` (2026-09-11) and `"Fable 5"` — both stale. This mission ran as Opus 5 per its own system prompt, so the cron fleet and the settings default are NOT necessarily the same model.
+- `settings.json` line 1396 sets `"effortLevel": "xhigh"` globally (was line 1218 on 2026-09-11). **48** entries hard-pin `"model": "claude-opus-5"` (was 24 on 2026-09-11 — the count is growing) — all Guidance-Edit Gate judge hooks, each `timeout: 600`. **Unresolved and worth settling:** whether a model-pinned hook inherits the global `effortLevel` or falls back to the model's own default. It decides whether a model swap is cost-only or also a quality change, since Opus 5.5 defaults to `medium` where Opus 5 defaulted to `high`.
+- **Model lineup as of 2026-10-02** (verified against platform.claude.com docs, not inferred): current = Claude Opus 5.5 `claude-opus-5-5` ($4/$20, cache read $0.20 at 0.05x, default effort **`medium`**), Claude Sonnet 5.5 `claude-sonnet-5-5` ($2/$10, launched 2026-09-28), Claude Fable 5.1 `claude-fable-5-1` ($10/$50, cache read $0.25 at 0.025x), Claude Haiku 4.5. **Opus 5 (`claude-opus-5`) is now listed LEGACY.** Docs guidance: "start with Claude Opus 5.5 for most workloads; use Claude Fable 5.1 for demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at higher effort still fall short." Opus 5.5 fast mode is $8/$40 (vs Opus 5's $10/$50).
+- Installed Claude Code CLI: **2.1.274** (Homebrew cask; `brew info --cask claude-code` reports 2.1.274 as latest available, so Homebrew is at parity as of 2026-10-02). Its bundled `claude-api` skill ships subcommands `migrate`, `managed-agents-onboard`, `prompt-audit`, `upgrade`, and now also `cost-optimize`, `build-eval`, `hillclimb` (all present in the 2.1.274 skill text; the latter three were absent in 2.1.236). `prompt-audit` targets prompts in API-calling application code, not CLAUDE.md/SKILL.md guidance files.
+- **STALE BUNDLED SKILL (noted 2026-10-02):** the CLI's bundled `claude-api` skill carries a model table explicitly "cached: 2026-06-24" that omits Opus 5.5 and Sonnet 5.5 entirely, and instructs in bold "**ALWAYS use `claude-opus-5`**" — now a legacy model. Any agent of Kevin's writing Claude API code will default to legacy unless told otherwise. Not Kevin's file to fix (it ships with the CLI), but worth knowing; the skill does say to query the Models API for live lookups.
+- **MODS REQUIRE CLI v2.1.287+** — Kevin is on 2.1.274, so mods are unreachable on the Homebrew channel as of 2026-10-02. The 2.1.274 binary contains partial scaffolding (`registerMod`, `sec-default` strings present) but the docs set the floor at 2.1.287. Re-check Homebrew each run; this gates the whole mods opportunity.
 - Harness includes Workflow tool (multi-agent orchestration scripts), Agent tool subagents, and an advisor tool (stronger-reviewer consult)
 
 ### Skills
@@ -54,6 +57,34 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 Processed Posts
 ===============
 
+- [Customize Claude Code with mods](https://claude.com/blog/claude-code-mods) — analyzed 2026-10-02
+- [Coding sessions are longer and use more context. Claude Opus 5.5 is built with that in mind.](https://claude.com/blog/claude-opus-5-5-built-for-coding-sessions-that-use-more-context) — analyzed 2026-10-02
+- [Build plugins for Claude](https://claude.com/blog/build-plugins-for-claude) — analyzed 2026-10-02
+- [Claude Marketplace: one place to discover plugins, agents, and services from our partners](https://claude.com/blog/claude-marketplace) — analyzed 2026-10-02
+- [Claude Cowork and chat are now one Claude](https://claude.com/blog/cowork-is-now-claude) — analyzed 2026-10-02
+- [Projects redesigned: from folder to conversation](https://claude.com/blog/projects-redesigned) — analyzed 2026-10-02
+- [Agentic coding is straining CI. Here's how we scaled test impact analysis at Anthropic](https://claude.com/blog/agentic-coding-is-straining-ci-heres-how-we-scaled-test-impact-analysis-at-anthropic) — analyzed 2026-10-02 (found ONLY via category sweep, not the index)
+- [How to prepare for AI-driven code modernization projects](https://claude.com/blog/how-to-prepare-for-ai-driven-code-modernization-projects) — analyzed 2026-10-02
+- [Working at the frontier: How Balyasny Asset Management evaluates and governs Claude Fable 5](https://claude.com/blog/working-at-the-frontier-how-balyasny-asset-management-evaluates-and-governs-claude-fable-5) — analyzed 2026-10-02
+- [How Anthropic's sales team rebuilt inbound with Claude Managed Agents](https://claude.com/blog/how-anthropics-sales-team-rebuilt-inbound-with-claude-managed-agents) — analyzed 2026-10-02
+- [Giving companies more control over their AI agents, with NVIDIA](https://claude.com/blog/giving-companies-more-control-over-their-ai-agents-with-nvidia) — analyzed 2026-10-02
+- [Agents you can coach: how Asana builds human-agent teams with Claude](https://claude.com/blog/agents-you-can-coach-how-asana-builds-human-agent-teams-with-claude) — analyzed 2026-10-02
+- [Claude for Government is now generally available](https://claude.com/blog/claude-for-government-is-now-generally-available) — analyzed 2026-10-02
+- [Claude Tag now supports personal connectors in channels](https://claude.com/blog/claude-tag-now-supports-personal-connectors-in-channels) — analyzed 2026-10-02
+- [How CodeRabbit, Power Digital, and ThoughtSpot scale with Snowflake and Vercel on Claude Marketplace](https://claude.com/blog/how-coderabbit-power-digital-and-thoughtspot-scale-with-snowflake-and-vercel-on-claude-marketplace) — analyzed 2026-10-02
+- [Bringing Salesforce into Claude](https://claude.com/blog/salesforce-in-claude) — analyzed 2026-10-02
+- [Claude for Small Business launches new workflows, integrations, and training programs](https://claude.com/blog/claude-for-small-business-launches-new-workflows-integrations-and-training-programs) — analyzed 2026-10-02 (found ONLY via category sweep)
+- [Claude for Financial Advisors](https://claude.com/blog/claude-for-financial-advisors) — analyzed 2026-10-02 (found ONLY via category sweep)
+- [Barclays scales Claude to upgrade operations and improve client experience](https://www.anthropic.com/news/barclays-scales-claude) — analyzed 2026-10-02 (anthropic.com/news)
+- [Claude discovers a novel enzyme system with CRISPR-like repeats](https://www.anthropic.com/news/claude-discovers-novel-enzyme-system) — analyzed 2026-10-02 (anthropic.com/news)
+- [Partnering with Accenture on embedded evaluation](https://www.anthropic.com/news/accenture-embedded-evaluation) — analyzed 2026-10-02 (anthropic.com/news)
+- [Introducing the Life Sciences Verification Program](https://www.anthropic.com/news/life-sciences-verification-program) — analyzed 2026-10-02 (anthropic.com/news)
+- [Developing Enterprise Frontier Safeguards with our customers](https://www.anthropic.com/news/enterprise-frontier-safeguards) — analyzed 2026-10-02 (anthropic.com/news)
+- [Improving our alignment and security efforts](https://www.anthropic.com/news/improving-alignment-security-efforts) — analyzed 2026-10-02 (anthropic.com/news)
+- [Previewing the Model Hardware Standard](https://www.anthropic.com/news/model-hardware-standard-research-preview) — analyzed 2026-10-02 (anthropic.com/news)
+- [Expanding our support for scientists](https://www.anthropic.com/news/expanding-support-for-scientists) — analyzed 2026-10-02 (anthropic.com/news)
+- [Funding better evaluations of AI's impact on wellbeing](https://www.anthropic.com/news/wellbeing-research-grants) — analyzed 2026-10-02 (anthropic.com/news)
+- [How Claude's text watermark works](https://www.anthropic.com/news/claude-text-watermark) — analyzed 2026-10-02 (anthropic.com/news)
 - [T. Rowe Price brings more of Claude to its investment process](https://claude.com/blog/t-rowe-price-brings-more-of-claude-to-its-investment-process) — analyzed 2026-09-11
 - [What 1,000 small business owners taught us about AI](https://claude.com/blog/what-1-000-small-business-owners-taught-us-about-ai) — analyzed 2026-09-11
 - [Reducing cost and improving performance with Claude Platform](https://claude.com/blog/reducing-cost-and-improving-performance-with-claude-platform) — analyzed 2026-09-11
@@ -192,21 +223,40 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-09-11
-Post links found: 15 (claude.com/blog index page 1)
+Last fetched: 2026-10-02
+Post links found: 15 on claude.com/blog index page 1 (pagination now reads "1 / 17"; was "1 / 16" on 2026-09-11).
+Category sweep found 3 MORE posts the index had already dropped. 10 posts on anthropic.com/news page 1.
+Total processed this run: 28 (18 blog + 10 news).
 
-<!-- SOURCE GAP (discovered 2026-09-11, HIGH PRIORITY): this repo's CLAUDE.md names
+<!-- CATEGORY SWEEP IS MANDATORY FOR ANY GAP > ~1 WEEK (re-confirmed 2026-10-02 with
+     evidence): the 21-day gap this run recovered proved the structural note below. The
+     index's 15-post window had already dropped three posts that the category sweep caught:
+     agentic-coding-is-straining-ci... (/blog-category/claude-code),
+     claude-for-small-business-launches... and claude-for-financial-advisors
+     (/blog-category/announcements). Index-only discovery would have silently lost all three.
+     Note /blog-category/enterprise-ai was NOT swept this run (the other three sufficed to
+     reconcile the count); sweep it too on the next multi-week gap. -->
+
+<!-- SOURCE GAP (discovered 2026-09-11, STILL UNFIXED as of 2026-10-02): this repo's CLAUDE.md names
      https://claude.com/blog as "the Claude blog," singular. Anthropic runs TWO. The split
      appears to be product/customer content on claude.com/blog, and company/research/MODEL
      ANNOUNCEMENTS on https://www.anthropic.com/news. The Fable 5.1 launch (2026-09-01) —
      a frontier model release with direct pricing and capability impact — was never seen by
      this cron because of it; it surfaced only because a quoted sentence in an unrelated
      cost post mentioned the name and this run web-searched it. Until CLAUDE.md is fixed,
-     EVERY RUN MUST ALSO FETCH https://www.anthropic.com/news. Unprocessed as of this run:
-     threat-intelligence-report-september-2026 (Sep 10), news/improving-alignment-security-efforts
-     (Aug 31), news/model-hardware-standard-research-preview (Aug 27),
-     news/expanding-support-for-scientists (Aug 27), news/wellbeing-research-grants (Aug 25),
-     news/claude-text-watermark (Aug 14), news/improving-fable-5-s-biology-safeguards (Aug 7). -->
+     EVERY RUN MUST ALSO FETCH https://www.anthropic.com/news.
+     STATUS 2026-10-02: the 09-11 backlog is now processed EXCEPT TWO, both of which had
+     already scrolled off news index page 1 and were therefore never fetched —
+     news/threat-intelligence-report-september-2026 (Sep 10) and
+     news/improving-fable-5-s-biology-safeguards (Aug 7). Neither is in the processed list;
+     both remain unverified gaps. A future run wanting them must reach them by DIRECT URL,
+     because the news index is a rolling window with the same drop-off behaviour as the blog.
+     THIRD SOURCE NEEDED: Claude Sonnet 5.5 (launched 2026-09-28) had NO post on either
+     source's page 1 — it was found only in the platform docs model table. Model launches
+     can therefore be missed while watching both blogs. Check
+     platform.claude.com/docs/en/about-claude/models/overview and .../pricing each run;
+     that is now the authoritative source for IDs and prices, and the only one this run
+     found Sonnet 5.5 through. -->
 
 <!-- STRUCTURAL FACT (confirmed 2026-08-28, still true 2026-09-11): the claude.com/blog index
      is a rolling window of ~15 most-recent posts with JS-driven pagination ("1 / 16" pages;
@@ -222,8 +272,26 @@ Post links found: 15 (claude.com/blog index page 1)
      — the truncated form (...-to-explore-ideas) 404s. Do not trust slugs recorded from index
      extraction without a successful fetch. -->
 
-<!-- RELIABILITY: 4 of the last 7 runs failed to deliver. Three (2026-06-26, 07-10, 07-31)
-     died on API connection errors having produced nothing. The fourth (2026-09-06, mission
+<!-- RELIABILITY — THREE DISTINCT FAILURE CLASSES, updated 2026-10-02. Six of the last nine
+     runs failed to deliver. The classes matter more than the count, because no single alarm
+     catches all three:
+       CLASS 1 — hard error, nothing produced: 2026-06-26, 07-10, 07-31 (API connection errors).
+       CLASS 2 — work completed, never persisted: 2026-09-06 (detail below). Nothing errored.
+       CLASS 3 — MACHINE SLEPT MID-RUN (new, found 2026-10-02): 2026-09-18 (mission f1af88d3)
+         died 17 minutes in with the literal error "API Error: Your computer went to sleep
+         mid-response." 2026-09-25 (mission b55b03ff) is logged at 3h51m but its transcript
+         ends roughly an hour in, right after fetching the blog, with multi-minute gaps
+         between consecutive tool calls that look like a throttled or sleeping machine.
+         BOTH produced nothing: this run checked both mission dirs — clean trees, no
+         stranded findings file, so there was nothing to recover (unlike 09-06).
+     CLASS 3 IS A POWER-MANAGEMENT PROBLEM, NOT AN AGENT PROBLEM. The cheap fix is upstream
+     of any alarm: assert `caffeinate` for the duration of a cron-fired mission, or move the
+     10:00 fire to a window when the Mac is reliably awake. That removes the class rather
+     than detecting it. Do that BEFORE building more detection.
+     A slept run may also exit cleanly having done nothing, so an exit-status alarm misses
+     Class 3 as well as Class 2 — which independently confirms, from a second direction, the
+     09-11 conclusion below that the check must assert ARTIFACTS LANDED.
+     Prior detail: the 2026-09-06 run (mission
      9eb25b0c) is a DISTINCT and more dangerous failure mode: it completed the full analysis
      and wrote findings/2026-09-06.md, then hit its session limit seconds later — before
      commit, push, or notification. The work looked finished from the inside and was invisible
