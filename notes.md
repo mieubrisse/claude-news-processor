@@ -73,6 +73,20 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 Processed Posts
 ===============
 
+<!-- ENTRY-KIND CONVENTION (defined 2026-10-16; the Guidance-Edit Gate caught this run using
+     it undefined, and it matters more than it looks):
+       "analyzed <date>"            = fetched and read. Processed.
+       "LISTING-LEVEL ONLY <date> (reason)" = DELIBERATELY not read, reason always stated.
+         Counts as processed for discovery dedup and is NEVER retried. The two reasons in use
+         are the enterprise/compliance skip (Standing Calibration Rules) and a model
+         announcement whose facts come from the authoritative platform docs table instead.
+       A post a run WANTED but COULD NOT fetch is NOT processed and does NOT belong in this
+         list — record it under CARRIED GAPS in Blog Health so a later run retries it.
+     Filing a couldn't-fetch as LISTING-LEVEL ONLY retires that post permanently and silently,
+     which is why the reason is never optional. This run initially marked four claude.dev posts
+     listing-level with a bare "(not fetched)" — two were then actually read, and two were
+     given real deliberate-skip reasons. Do not reintroduce the bare form. -->
+
 ### claude.dev/blog (developer blog — NEW SOURCE, first processed 2026-10-16)
 
 - [How the Claude Code team does code review](https://claude.dev/blog/solving-code-review-at-anthropic/) — analyzed 2026-10-16

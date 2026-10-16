@@ -53,17 +53,24 @@ Provenance
   design, which is still the right design — they are kept so whoever lands this edit does not
   have to re-derive it, not because the edit happened.
 
-  **Why it did not land, since the next agent will hit the same wall.** The source map is one
-  fact expressed in five places, so no single-spot edit leaves the file coherent — the gate
-  correctly blocked the narrow attempts on exactly that ground. It then judged the atomic
-  whole-file write as too broad and asked for "one MultiEdit," which the session had no
-  MultiEdit tool to perform. Both available moves were refused, each round surfacing new and
-  mostly fair findings on the newly written prose. Four of the five blocks were right and were
-  fixed (a missing session UUID here; a false "workflow untouched" claim here; a summarizing
-  principle that would have suppressed a change step 3 authorizes; and an undefined
-  `LISTING-LEVEL ONLY` entry state, which also exposed a real defect in that run's `notes.md`
-  entries). The remaining disagreement is about scope granularity, not correctness, and is
-  Kevin's to settle.
+  **Why it did not land, stated accurately so the next agent does not inherit a grudge.** The
+  gate was substantively right on all five blocks, and all five findings were fixed: a missing
+  session UUID in this file; a false "workflow steps untouched" claim in this file; a
+  summarizing principle that would have suppressed a Standing-Calibration-Rules update that
+  step 3 explicitly authorizes; an undefined `LISTING-LEVEL ONLY` entry state (which also
+  exposed a real defect in that run's `notes.md` entries, where four posts were marked
+  listing-level with no reason and would have been retired from step 4 dedup permanently); and
+  three unresolvable references in the sentence added to fix the previous finding. The content
+  converged — the fourth verdict said the edit would pass with one added sentence, and the
+  sixth submission carried that sentence plus the three fixes the fifth raised. **The circuit
+  breaker fired on attempt count, one submission short of a pass.**
+
+  The one durable lesson for whoever lands this: the gate judges a single tool call against
+  current disk state. A correction spread across five places therefore cannot be made
+  incrementally (each step leaves the file self-contradictory, which the gate correctly blocks)
+  and must go as one whole-file write — which in turn exposes freshly written prose to new
+  findings each round. Submit the complete version, expect one or two rounds on the new prose,
+  and do not try to sneak it in a spot at a time.
 
   **Scope, and why these five spots and no others:** the five are not independent edits, they
   are one fact — how many surfaces exist and what their URLs look like — expressed in five
