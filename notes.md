@@ -10,12 +10,28 @@ Setup Context
 - Repo library at ~/.agenc/repos for read-only reference across missions
 - Writeable-copy repos (dotfiles, exobrain) are daemon-persisted — agents must NOT git add/commit/push there
 - Cron fleet includes: claude-news-processor (this repo), build-weekly-plan, daily-state-summary, flight-watcher, hn-daily-pull, exobrain-update, verify-workspace-mcp-denylist, arpan-claude-optimization-suggestions
-- **Model: varies per mission — do not assume. Re-read settings each run; these numbers drift fast.** As of 2026-10-02, `settings.json` line 690 sets the session default to `"model": "fable"` (an ALIAS — this run could NOT determine whether it resolves to `claude-fable-5` or `claude-fable-5-1`, and the difference is 4x on cache reads: $1.00 vs $0.25/MTok. Resolve before costing anything). Prior runs recorded `"opus[1m]"` (2026-09-11) and `"Fable 5"` — both stale. This mission ran as Opus 5 per its own system prompt, so the cron fleet and the settings default are NOT necessarily the same model.
-- `settings.json` line 1396 sets `"effortLevel": "xhigh"` globally (was line 1218 on 2026-09-11). **48** entries hard-pin `"model": "claude-opus-5"` (was 24 on 2026-09-11 — the count is growing) — all Guidance-Edit Gate judge hooks, each `timeout: 600`. **Unresolved and worth settling:** whether a model-pinned hook inherits the global `effortLevel` or falls back to the model's own default. It decides whether a model swap is cost-only or also a quality change, since Opus 5.5 defaults to `medium` where Opus 5 defaulted to `high`.
-- **Model lineup as of 2026-10-02** (verified against platform.claude.com docs, not inferred): current = Claude Opus 5.5 `claude-opus-5-5` ($4/$20, cache read $0.20 at 0.05x, default effort **`medium`**), Claude Sonnet 5.5 `claude-sonnet-5-5` ($2/$10, launched 2026-09-28), Claude Fable 5.1 `claude-fable-5-1` ($10/$50, cache read $0.25 at 0.025x), Claude Haiku 4.5. **Opus 5 (`claude-opus-5`) is now listed LEGACY.** Docs guidance: "start with Claude Opus 5.5 for most workloads; use Claude Fable 5.1 for demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at higher effort still fall short." Opus 5.5 fast mode is $8/$40 (vs Opus 5's $10/$50).
+- **Model (re-verified live 2026-10-16, do not carry these forward without re-checking):**
+  `settings.json` line 690 sets the session default to `"model": "fable"`, which RESOLVES TO
+  `claude-fable-5-1` — confirmed empirically this run by asking a headless session for its own
+  model ID, not inferred from binary selector strings. Fable 5.1 is $10/$50 per MTok, the most
+  expensive current model, with cache reads at 2.5% ($0.25/MTok). Prior runs recorded
+  `"opus[1m]"` (2026-09-11) and an unresolved `fable` alias (2026-10-02); both superseded.
+- `settings.json` line 1396 sets `"effortLevel": "xhigh"` globally (unchanged 2026-10-16; was line 1218 on 2026-09-11). **48** entries hard-pin `"model": "claude-opus-5"` (re-counted live 2026-10-16: still exactly 48, and it is the ONLY model string pinned anywhere in the file; was 24 on 2026-09-11) — all Guidance-Edit Gate judge hooks, each `timeout: 600`. **Unresolved and worth settling:** whether a model-pinned hook inherits the global `effortLevel` or falls back to the model's own default. It decides whether a model swap is cost-only or also a quality change, since Opus 5.5 defaults to `medium` where Opus 5 defaulted to `high`.
+- **Model lineup as of 2026-10-16** (verified against platform.claude.com/docs models overview):
+  Fable 5.1 `claude-fable-5-1` ($10/$50, cache read 2.5%, default effort **`high`**);
+  Opus 5.5 `claude-opus-5-5` ($4/$20, cache read 5%, default effort **`medium`**);
+  Sonnet 5.5 `claude-sonnet-5-5` ($2/$10, cache read 5%, default effort **`high`**);
+  Haiku 5.5 `claude-haiku-5-5` (NEW 2026-10-07, from $0.10/$0.50, cache read 10%, default
+  effort **`medium`**; Terminal-Bench 4.0 39.2% vs Sonnet 5.5's 52.1%, so "best suited to more
+  narrowly scoped tasks" — Anthropic pitches it for summaries, compactions, classification,
+  and "as a subagent on coding work"). All four: 1M context, 128K max output, Jun 2026 cutoff.
+  **LEGACY (still available): Fable 5, Opus 5, Sonnet 5, Haiku 4.5, and the 4.x Opus line.**
+  Docs guidance: "start with Claude Opus 5.5 for most workloads. Use Claude Fable 5.1 for
+  demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5.5 at
+  higher effort still fall short." Note that last clause presumes an eval harness exists.
 - Installed Claude Code CLI: **2.1.274** (Homebrew cask; `brew info --cask claude-code` reports 2.1.274 as latest available, so Homebrew is at parity as of 2026-10-02). Its bundled `claude-api` skill ships subcommands `migrate`, `managed-agents-onboard`, `prompt-audit`, `upgrade`, and now also `cost-optimize`, `build-eval`, `hillclimb` (all present in the 2.1.274 skill text; the latter three were absent in 2.1.236). `prompt-audit` targets prompts in API-calling application code, not CLAUDE.md/SKILL.md guidance files.
 - **STALE BUNDLED SKILL (noted 2026-10-02):** the CLI's bundled `claude-api` skill carries a model table explicitly "cached: 2026-06-24" that omits Opus 5.5 and Sonnet 5.5 entirely, and instructs in bold "**ALWAYS use `claude-opus-5`**" — now a legacy model. Any agent of Kevin's writing Claude API code will default to legacy unless told otherwise. Not Kevin's file to fix (it ships with the CLI), but worth knowing; the skill does say to query the Models API for live lookups.
-- **MODS REQUIRE CLI v2.1.287+** — Kevin is on 2.1.274, so mods are unreachable on the Homebrew channel as of 2026-10-02. The 2.1.274 binary contains partial scaffolding (`registerMod`, `sec-default` strings present) but the docs set the floor at 2.1.287. Re-check Homebrew each run; this gates the whole mods opportunity.
+- **MODS: NOW REACHABLE (2026-10-16).** Mods require CLI v2.1.287 and `brew info --cask claude-code` now reports `2.1.274 -> 2.1.287`, exactly the floor. Kevin is still ON 2.1.274, so the upgrade is the one remaining step. (Was the blocking gate on 2026-10-02.) The 2.1.274 binary contains partial scaffolding (`registerMod`, `sec-default` strings present) but the docs set the floor at 2.1.287. Re-check Homebrew each run; this gates the whole mods opportunity.
 - Harness includes Workflow tool (multi-agent orchestration scripts), Agent tool subagents, and an advisor tool (stronger-reviewer consult)
 
 ### Skills
@@ -56,6 +72,46 @@ workspace-mcp (Google Workspace, account k@kevintoday.com), hevy (workouts), gra
 
 Processed Posts
 ===============
+
+### claude.dev/blog (developer blog — NEW SOURCE, first processed 2026-10-16)
+
+- [How the Claude Code team does code review](https://claude.dev/blog/solving-code-review-at-anthropic/) — analyzed 2026-10-16
+- [Building effective agent automations](https://claude.dev/blog/building-effective-agent-automations/) — analyzed 2026-10-16
+- [Claude Code in the cloud: a field guide to cloud sessions](https://claude.dev/blog/claude-code-in-the-cloud/) — analyzed 2026-10-16
+- [Getting started with Claude Code mods](https://claude.dev/blog/getting-started-with-claude-code-mods/) — analyzed 2026-10-16
+- [Automating eval design and hillclimbing with Claude](https://claude.dev/blog/automating-eval-design-and-hillclimbing/) — analyzed 2026-10-16
+- [Using Claude Code: Spending your effort](https://claude.dev/blog/spending-your-effort/) — analyzed 2026-10-16
+- [Building with Claude Sonnet 5.5](https://claude.dev/blog/building-with-claude-sonnet-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
+- [What a task costs on Opus 5.5](https://claude.dev/blog/what-a-task-costs-on-opus-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
+- [Getting the most out of Opus 5.5 in Claude and Claude Code](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
+- [How we made claude.ai 3x faster in two weeks](https://claude.dev/blog/how-we-made-claude-ai-faster/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
+
+### claude.com/resources/articles (the relocated blog)
+
+- [Code Review is now generally available](https://claude.com/resources/articles/code-review-is-now-generally-available) — analyzed 2026-10-16
+- [Agent observability on the Claude Platform](https://claude.com/resources/articles/agent-observability-on-the-claude-platform) — analyzed 2026-10-16
+- [Build live dashboards and animate explainers with Claude](https://claude.com/resources/articles/dashboards-and-motion) — analyzed 2026-10-16
+- [Claude now works with Google Docs, Sheets, and Slides](https://claude.com/resources/articles/claude-now-works-in-google-docs-sheets-and-slides) — analyzed 2026-10-16
+- [How Block orchestrates Claude Fable across thousands of pull requests](https://claude.com/resources/articles/how-block-orchestrates-claude-fable-across-thousands-of-pull-requests) — LISTING-LEVEL ONLY 2026-10-16 (enterprise, Standing Rule 2)
+- [Uber's CISO on building an insider threat program for AI](https://claude.com/resources/articles/uber-s-ciso-on-building-an-insider-threat-program-for-ai) — LISTING-LEVEL ONLY 2026-10-16 (enterprise, Standing Rule 2)
+- [How Comcast and Booz Allen use Claude Mythos to secure their codebases](https://claude.com/resources/articles/how-comcast-booz-allen-use-claude-mythos-to-secure-their-codebases) — LISTING-LEVEL ONLY 2026-10-16 (enterprise, Standing Rule 2)
+- [How Cresta turned CX expertise into an agent builder on the Claude Agent SDK](https://claude.com/resources/articles/how-cresta-turned-cx-expertise-into-an-agent-builder-on-the-claude-agent-sdk) — LISTING-LEVEL ONLY 2026-10-16 (enterprise, Standing Rule 2)
+- [We're expanding the Claude Startups program to help founders build](https://claude.com/resources/articles/were-expanding-the-claude-startups-program-to-help-founders-build) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+
+### anthropic.com/news
+
+- [Introducing Claude Haiku 5.5](https://www.anthropic.com/claude-haiku-5-5) — analyzed 2026-10-16
+- [2026 Usage Policy update](https://www.anthropic.com/news/2026-usage-policy-update) — analyzed 2026-10-16 (effective 2026-11-12; no impact on Kevin's use cases)
+- [Improving Fable 5's biology safeguards](https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards) — analyzed 2026-10-16 (CARRIED GAP NOW CLOSED; transferable technique: carve out benign uses in detail, ~85% false-positive reduction)
+- [Expanding the Cyber Verification Program](https://www.anthropic.com/news/cyber-verification-program) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [An update on independent evaluators](https://www.anthropic.com/news/an-update-on-independent-evaluators) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [Preparing for the 2026 US midterms](https://www.anthropic.com/news/2026-us-midterms) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [Anthropic opens Singapore office and signs MOU](https://www.anthropic.com/news/singapore-office-opening) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [Introducing the Anthropic Cyber Mission](https://www.anthropic.com/news/anthropic-cyber-mission) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [Building on our commitment to American scientific discovery](https://www.anthropic.com/news/genesis-mission-commitment) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+- [Anthropic invests $100 million to train 10,000 engineers (Claude Frontier Academy)](https://www.anthropic.com/news/claude-frontier-academy) — LISTING-LEVEL ONLY 2026-10-16 (Standing Rule 2)
+
+### Earlier runs
 
 - [Deploying AI from pilot to production](https://claude.com/blog/deploying-ai-from-pilot-to-production) — analyzed 2026-10-02 (found ONLY via /blog-category/enterprise-ai sweep)
 - [Building an AI-native revenue organization](https://claude.com/blog/building-an-ai-native-revenue-organization) — analyzed 2026-10-02 (found ONLY via /blog-category/enterprise-ai sweep)
@@ -226,11 +282,74 @@ Processed Posts
 Blog Health
 ===========
 
-Last fetched: 2026-10-02
-Post links found: 15 on claude.com/blog index page 1 (pagination now reads "1 / 17"; was "1 / 16" on 2026-09-11).
-Category sweep found 6 MORE posts the index had already dropped (3 from claude-code/announcements,
-3 from enterprise-ai). 10 posts on anthropic.com/news page 1.
-Total processed this run: 31 (21 blog + 10 news).
+Last fetched: 2026-10-16
+SITE RESTRUCTURE DETECTED THIS RUN. Post links found: 11 on claude.com/resources/articles
+(pagination now reads "Showing 11 of 283 resources"; was "1 / 17" over a 15-post window on
+2026-10-02). Plus 10 on claude.dev/blog (NEW SOURCE, never processed before this run) and 14
+on anthropic.com/news page 1.
+Total processed this run: 29 (10 claude.dev + 9 claude.com + 10 anthropic.com), of which 15
+were read in full and 14 recorded at listing level only.
+
+<!-- THE BLOG MOVED (2026-10-16). claude.com/blog is now claude.com/resources, a hub whose
+     article stream lives at /resources/articles/<slug>. Old /blog/<slug> URLs STILL RESOLVE
+     via redirect, so the ~60 historical entries above remain valid for dedup — do NOT rewrite
+     them. But the canonical slug can change on the move: /blog/claude-code-mods now serves
+     /resources/articles/customize-claude-code-with-mods. So match a candidate against this
+     list by BOTH old and new slug before concluding it is unprocessed.
+     The old /blog-category/* pages are superseded by five hub sections, all plain-fetchable:
+       /resources/articles  /resources/product-announcements  /resources/best-practices
+       /resources/perspectives  /resources/insights
+     SWEEP ALL FIVE, EVERY TIME. The 2026-10-16 run confirmed the old lesson under the new
+     structure: /resources/best-practices was the ONLY page surfacing the Cresta post, and the
+     claude.dev posts appear scattered across best-practices and perspectives rather than in
+     /resources/articles. The window is now 11 posts, so it drops backlog FASTER than the old
+     15-post one. "Showing 11 of 283" counts guides, webinars and videos too — do not try to
+     enumerate 283. -->
+
+<!-- FOURTH SOURCE, AND THE MOST RELEVANT ONE: https://claude.dev/blog — Anthropic's developer
+     blog, "technical writing for people building with Claude." NEVER PROCESSED BEFORE
+     2026-10-16. Its ten posts are more relevant to Kevin's setup than the median claude.com
+     enterprise case study: Claude Code mods, cloud sessions, eval design and hillclimbing,
+     effort levels, agent automations, the Anthropic code-review pipeline. Oldest visible post
+     is Sep 22 2026, which is Opus 5.5 launch day, so the blog plausibly launched then — NOT
+     PROVEN. Pagination is a JS "LOAD MORE"; /blog/page/2/ returns 404, so there is no known
+     plain-fetch route to older posts. If a future run needs them, try the claude.com hub
+     sections, which syndicate claude.dev posts with their own curation dates (which DISAGREE
+     with claude.dev's own dates — trust claude.dev's). -->
+
+<!-- SOURCE LIST AS OF 2026-10-16 — four sources, all mandatory every run:
+       1. https://claude.com/resources + its five section pages (above)
+       2. https://claude.dev/blog               (developer blog)
+       3. https://www.anthropic.com/news        (company/research/model announcements)
+       4. https://platform.claude.com/docs/en/about-claude/models/overview and .../pricing
+          (authoritative for model IDs, prices, default effort — and the only source that
+          surfaced Sonnet 5.5 in 2026-10-02)
+     This repo's CLAUDE.md was corrected on 2026-10-16 to name all four; before that it named
+     only source 1 and instructed extraction of /blog/<slug> hrefs, which match nothing on the
+     live site. -->
+
+<!-- CARRIED GAPS — STATUS 2026-10-16:
+       news/improving-fable-5-s-biology-safeguards — CLOSED, fetched and analyzed this run.
+       news/threat-intelligence-report-september-2026 — 404s. The slug recorded on 2026-10-02
+         was wrong (see the SLUG WARNING below). RETIRED as unreachable rather than carried;
+         a future run wanting it must find the real slug via search, not this URL.
+     DELIBERATELY NOT FETCHED this run: anthropic.com/claude-sonnet-5-5 and
+     anthropic.com/claude-opus-5-5. Both are model-announcement posts whose facts this cron
+     takes from the authoritative docs table (source 4), which supersedes them. Recorded as a
+     decision, not an oversight. -->
+
+<!-- RESOLVED 2026-10-16 — two questions this cron carried for multiple runs:
+       MODEL ALIAS: settings.json's bare `"model": "fable"` resolves to `claude-fable-5-1`.
+         Determined EMPIRICALLY, not from binary strings: `claude -p "Reply with ONLY your
+         exact model ID"` from a mission shell returned `claude-fable-5-1`. That method is the
+         cheap discriminator for any future alias question — use it instead of inferring.
+       MODS REACHABILITY: mods need CLI 2.1.287; `brew info --cask claude-code` now reports
+         `2.1.274 -> 2.1.287`, so Homebrew is AT the floor. Kevin is still ON 2.1.274.
+     STILL OPEN AFTER THREE RUNS: whether a model-pinned hook inherits the global
+     `effortLevel: "xhigh"` or falls back to the pinned model's own default. The claude.dev
+     effort post does not mention hooks or subagents; the docs define default effort only as
+     the Claude API parameter default. STOP WAITING FOR A POST — this needs a one-hook
+     experiment, and the 2026-10-16 digest asks Kevin to authorize it. -->
 
 <!-- CATEGORY SWEEP IS MANDATORY FOR ANY GAP > ~1 WEEK (re-confirmed 2026-10-02 with
      evidence): the 21-day gap this run recovered proved the structural note below. The
@@ -288,6 +407,34 @@ Total processed this run: 31 (21 blog + 10 news).
      how-the-product-designer-who-built-claude-design-uses-it-to-explore-ideas-before-building-them
      — the truncated form (...-to-explore-ideas) 404s. Do not trust slugs recorded from index
      extraction without a successful fetch. -->
+
+<!-- RELIABILITY — A FOURTH CLASS FOUND 2026-10-16: THE RUN THAT NEVER FIRED.
+     The schedule is `0 9 * * 5` (weekly, Friday). 2026-10-02 fired; 2026-10-16 fired; there is
+     NO mission record for 2026-10-09 in `agenc cron history` at all. Not a run that failed — a
+     run that never started, leaving nothing to error, nothing to recover, and nothing for any
+     exit-status OR artifact-landed check to notice, because no run existed to check.
+       CLASS 4 — NEVER FIRED: 2026-10-09 (no mission). Cause unconfirmed; the likely candidates
+         are the Mac being asleep or powered off at the fire moment, or the AgenC daemon not
+         running — which makes it a sibling of Class 3, not a separate root cause.
+     ALL FOUR CLASSES SHARE ONE ROOT: the work depends on Kevin's Mac being awake and the
+     daemon alive at a fixed weekly moment. That reframes the fix. Detection (bead agenc-inrf)
+     cannot see Class 4 from inside, so the check must be EXTERNAL to the fleet — something
+     that knows a Friday passed without a run. Two leads, both recorded in the 2026-10-16
+     findings file:
+       (a) Claude Code emits OpenTelemetry NATIVELY (verified against code.claude.com/docs/en/
+           monitoring-usage, not inferred): `CLAUDE_CODE_ENABLE_TELEMETRY=1` plus
+           `OTEL_METRICS_EXPORTER=prometheus` serves metrics on localhost:9464, including
+           `claude_code.session.count`, `claude_code.cost.usage`, `claude_code.token.usage`,
+           and events `claude_code.tool_result` / `claude_code.api_error`. A session that
+           started with no `tool_result` event is a run that did nothing — the artifact-level
+           assertion the 2026-09-11 run concluded was needed, reached from a second direction.
+           Local-only, which fits Kevin's local-first preference.
+       (b) Claude Code CLOUD SESSIONS and Routines remove Classes 3 and 4 outright: cloud
+           "continues while user away" where local "stops when laptop sleeps/disconnects."
+           HARD BLOCKER: "Repository-level `.claude/` settings, CLAUDE.md, skills, and agents
+           travel to the cloud VM, but personal `~/.claude` config does not." Kevin's whole
+           exobrain is in `~/.claude`, and a cloud VM has no `agenc` CLI or notification
+           system — so this is a candidate to SCOPE, not a migration to schedule. -->
 
 <!-- RELIABILITY — THREE DISTINCT FAILURE CLASSES, updated 2026-10-02. Six of the last nine
      runs failed to deliver. The classes matter more than the count, because no single alarm
