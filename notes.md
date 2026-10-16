@@ -81,10 +81,10 @@ Processed Posts
 - [Getting started with Claude Code mods](https://claude.dev/blog/getting-started-with-claude-code-mods/) — analyzed 2026-10-16
 - [Automating eval design and hillclimbing with Claude](https://claude.dev/blog/automating-eval-design-and-hillclimbing/) — analyzed 2026-10-16
 - [Using Claude Code: Spending your effort](https://claude.dev/blog/spending-your-effort/) — analyzed 2026-10-16
-- [Building with Claude Sonnet 5.5](https://claude.dev/blog/building-with-claude-sonnet-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
-- [What a task costs on Opus 5.5](https://claude.dev/blog/what-a-task-costs-on-opus-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
-- [Getting the most out of Opus 5.5 in Claude and Claude Code](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
-- [How we made claude.ai 3x faster in two weeks](https://claude.dev/blog/how-we-made-claude-ai-faster/) — LISTING-LEVEL ONLY 2026-10-16 (not fetched)
+- [Building with Claude Sonnet 5.5](https://claude.dev/blog/building-with-claude-sonnet-5-5/) — analyzed 2026-10-16
+- [What a task costs on Opus 5.5](https://claude.dev/blog/what-a-task-costs-on-opus-5-5/) — LISTING-LEVEL ONLY 2026-10-16 (deliberate skip: pricing facts taken from the authoritative platform docs table, which supersedes a post)
+- [Getting the most out of Opus 5.5 in Claude and Claude Code](https://claude.dev/blog/getting-the-most-out-of-opus-5-5/) — analyzed 2026-10-16
+- [How we made claude.ai 3x faster in two weeks](https://claude.dev/blog/how-we-made-claude-ai-faster/) — LISTING-LEVEL ONLY 2026-10-16 (deliberate skip: internal engineering retrospective, no apparent surface on Kevin's setup)
 
 ### claude.com/resources/articles (the relocated blog)
 
@@ -324,9 +324,14 @@ were read in full and 14 recorded at listing level only.
        4. https://platform.claude.com/docs/en/about-claude/models/overview and .../pricing
           (authoritative for model IDs, prices, default effort — and the only source that
           surfaced Sonnet 5.5 in 2026-10-02)
-     This repo's CLAUDE.md was corrected on 2026-10-16 to name all four; before that it named
-     only source 1 and instructed extraction of /blog/<slug> hrefs, which match nothing on the
-     live site. -->
+     THIS REPO'S CLAUDE.md IS STILL WRONG AS OF 2026-10-16 AND MUST BE FIXED. It names only
+     source 1 and instructs extraction of /blog/<slug> hrefs, which match nothing on the live
+     site. The 2026-10-16 run attempted the correction and the Guidance-Edit Gate blocked it
+     five times, tripping its circuit breaker and notifying Kevin; the run stopped retrying as
+     the breaker instructs. The intended replacement text, the gate's findings, and the
+     reasoning are in findings/2026-10-16.md (Suggestion 6). A future run MUST NOT trust
+     CLAUDE.md's Blog Source section — use the four-source list in this file until Kevin has
+     ruled and the file is actually fixed. -->
 
 <!-- CARRIED GAPS — STATUS 2026-10-16:
        news/improving-fable-5-s-biology-safeguards — CLOSED, fetched and analyzed this run.
